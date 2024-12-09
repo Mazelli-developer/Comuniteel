@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            height: 40px;
+        }
+
+        .header .user {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header .user span {
+            font-size: 1.2rem;
+        }
+
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 1.1rem;
+        }
+
+        .timeline {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .post {
+            background-color: #111;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .post .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post .user-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post .user-info span {
+            font-weight: bold;
+        }
+
+        .post .content {
+            margin: 10px 0;
+        }
+
+        .topics {
+            background-color: #222;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .topics h2 {
+            margin: 0 0 10px;
+        }
+
+        .topics ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .topics li {
+            background-color: #333;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .topics li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        /* Estilos do campo de postagem */
+        .create-post {
+            background-color: #111;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .create-post textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #222;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            resize: none;
+            font-size: 1rem;
+        }
+
+        .create-post select, .create-post button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .create-post select {
+            background-color: #222;
+        }
+
+        .create-post button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ComunitEEL</h1>
+        <div class="user">
+            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="User Avatar">
+            <span>{{ current_user.username }}</span>
+        </div>
+        <div class="nav">
+            <a href="{{ url_for('create_topic') }}">Criar Tópico</a>
+            <a href="{{ url_for('profile') }}">Perfil</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+
+    <!-- Campo para criar posts -->
+    <div class="create-post">
+        <form method="POST">
+            <textarea name="content" placeholder="O que você está pensando?" rows="3" required></textarea>
+            
+            <!-- Seleção de tópico -->
+            <select name="topic_id" required>
+                <option value="" disabled selected>Escolha um Tópico</option>
+                {% for topic in topics %}
+                    <option value="{{ topic.id }}">{{ topic.title }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit">Postar</button>
+        </form>
+    </div>
+
+    <div class="timeline">
+        <h2>Posts Recentes</h2>
+        {% for post in posts %}
+        <div class="post">
+            <div class="user-info">
+                <img src="https://www.w3schools.com/w3images/avatar2.png" alt="User Avatar">
+                <span>{{ post.user.username }}</span>
+            </div>
+            <div class="content">
+                <p>{{ post.content }}</p>
+            </div>
+            <div class="topic-info">
+                <small>Tópico: {{ post.topic.title }}</small>
+            </div>
+            <div class="post-time">
+                <small>Postado em: {{ post.date_posted.strftime('%d/%m/%Y às %H:%M') }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="topics">
+        <h2>Tópicos</h2>
+        <ul>
+            {% for topic in topics %}
+            <li>
+                <a href="#">{{ topic.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>

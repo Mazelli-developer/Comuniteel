@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            height: 40px;
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .profile-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .profile-info form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-info input, .profile-info textarea, .profile-info select {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #222;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .profile-info button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .profile-info button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ComunitEEL</h1>
+        <div class="user">
+            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="User Avatar">
+            <span>{{ current_user.username }}</span>
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <h2>Meu Perfil</h2>
+        <!-- Exibe a foto de perfil do usuário -->
+        <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_picture) }}" alt="Profile Picture">
+        <p><strong>Tag:</strong> {{ current_user.tag }}</p>  <!-- Exibe a tag do usuário -->
+        <form method="POST" enctype="multipart/form-data">
+            <label for="profile_picture">Alterar Foto de Perfil</label>
+            <input type="file" name="profile_picture" id="profile_picture">
+            
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" rows="3">{{ current_user.bio }}</textarea>
+    
+            <label for="course">Curso</label>
+            <input type="text" name="course" id="course" value="{{ current_user.course }}">
+    
+            <label for="ano_entrada">Ano de Entrada</label>
+            <input type="number" name="ano_entrada" id="ano_entrada" value="{{ current_user.ano_entrada }}" required>
+    
+            <label for="tag">Tipo de Usuário</label>
+            <select name="tag" id="tag">
+                <option value="aluno" {% if current_user.tag == 'aluno' %}selected{% endif %}>Aluno</option>
+                <option value="professor" {% if current_user.tag == 'professor' %}selected{% endif %}>Professor</option>
+                <option value="funcionario" {% if current_user.tag == 'funcionario' %}selected{% endif %}>Funcionário</option>
+            </select>
+    
+            <button type="submit">Salvar Alterações</button>
+        </form>
+    </div>
+    
+
+</body>
+</html>
